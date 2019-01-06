@@ -4,12 +4,12 @@ export PATH
 #=================================================
 #	System Required: CentOS 7+
 #	Description: ssrpanel后端一键安装脚本
-#	Version: 0.0.8
+#	Version: 0.0.9
 #	Author: 壕琛
 #	Blog: http://mluoc.top/
 #=================================================
 
-sh_ver="0.0.8"
+sh_ver="0.0.9"
 github="https://raw.githubusercontent.com/mlch911/ssrpanel-script/master/ssrpanel-script.sh"
 
 Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"
@@ -112,19 +112,24 @@ Update_Shell(){
 #安装依赖
 Install_Shell(){
 	if [[ "${release}" == "centos" ]]; then
-		# cd ~ || read -p "${Error}依赖安装失败！按任意键返回主界面。" x
-		curl -fsSL get.docker.com | sh
-		curl -L "https://github.com/docker/compose/releases/download/1.23.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-		chmod +x /usr/local/bin/docker-compose
-		yum -y install epel-release
-		yum -y install python-pip
-		yum -y install unzip
-		pip install docker-compose
+		# curl -fsSL get.docker.com | sh
+		# curl -L "https://github.com/docker/compose/releases/download/1.23.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+		# chmod +x /usr/local/bin/docker-compose
+		# yum -y install epel-release
+		# yum -y install python-pip
+		# yum -y install unzip
+		# pip install docker-compose
+
+		yum -y remove docker docker-common container-selinux docker-selinux docker-engine docker-engine-selinux
+		yum install -y yum-utils device-mapper-persistent-data lvm2
+		yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+		yum makecache fast
+		yum install docker-ce
+		systemctl enable docker
+		systemctl start docker
 		cd /root
 		wget https://github.com/kszym2002/ssrpanel-be/releases/download/caddy-0.0.3/caddy-0.0.3.zip
 		unzip caddy-0.0.3.zip
-		systemctl enable docker
-		systemctl start docker
 	fi
 
 	echo -e "${Info}依赖安装结束！"
