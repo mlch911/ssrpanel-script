@@ -4,12 +4,12 @@ export PATH
 #=================================================
 #	System Required: CentOS 7+
 #	Description: ssrpanel后端一键安装脚本
-#	Version: 0.0.1
+#	Version: 0.0.3
 #	Author: 壕琛
 #	Blog: http://mluoc.top/
 #=================================================
 
-sh_ver="0.0.1"
+sh_ver="0.0.3"
 github="https://git.mluoc.tk/mlch911/ssrpanel-script/raw/branch/master"
 
 Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"
@@ -25,7 +25,6 @@ start_menu(){
 	echo && echo -e " sspanel后端 一键安装管理脚本 ${Red_font_prefix}[v${sh_ver}]${Font_color_suffix}
 	  -- 壕琛小站 | cc.mluoc.tk --
 
-	  第一次运行，请按照0->1->2->3->4的顺序执行脚本
 
 	 ${Green_font_prefix}0.${Font_color_suffix} 升级脚本
 	 ${Green_font_prefix}1.${Font_color_suffix} 安装依赖(只需执行一次，若重复执行会覆盖原有配置)
