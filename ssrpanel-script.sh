@@ -4,13 +4,13 @@ export PATH
 #=================================================
 #	System Required: CentOS 7+
 #	Description: ssrpanel后端一键安装脚本
-#	Version: 0.0.4
+#	Version: 0.0.5
 #	Author: 壕琛
 #	Blog: http://mluoc.top/
 #=================================================
 
-sh_ver="0.0.4"
-github="https://git.mluoc.tk/mlch911/ssrpanel-script/raw/branch/master"
+sh_ver="0.0.5"
+github="https://raw.githubusercontent.com/mlch911/ssrpanel-script/master/ssrpanel-script.sh"
 
 Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"
 Info="${Green_font_prefix}[信息]${Font_color_suffix}"
@@ -43,7 +43,7 @@ start_menu(){
 		# 	echo -e " 当前状态: ${Green_font_prefix}已安装${Font_color_suffix} ${_font_prefix}${kernel_status}${Font_color_suffix} 加速内核 , ${Green_font_prefix}${run_status}${Font_color_suffix}"
 		# fi
 
-		sh_new_ver=$(wget --no-check-certificate -qO- "${github}/ssrpanel-script.sh"|grep 'sh_ver="'|awk -F "=" '{print $NF}'|sed 's/\"//g'|head -1)
+		sh_new_ver=$(wget --no-check-certificate -qO- "${github}"|grep 'sh_ver="'|awk -F "=" '{print $NF}'|sed 's/\"//g'|head -1)
 		if [[ ${sh_new_ver} != ${sh_ver} ]]; then
 			Update_Shell
 		fi
@@ -88,14 +88,14 @@ start_menu(){
 #更新脚本
 Update_Shell(){
 	echo -e "当前版本为 [ ${sh_ver} ]，开始检测最新版本..."
-	sh_new_ver=$(wget --no-check-certificate -qO- "${github}/ssrpanel-script.sh"|grep 'sh_ver="'|awk -F "=" '{print $NF}'|sed 's/\"//g'|head -1)
+	sh_new_ver=$(wget --no-check-certificate -qO- "${github}"|grep 'sh_ver="'|awk -F "=" '{print $NF}'|sed 's/\"//g'|head -1)
 	[[ -z ${sh_new_ver} ]] && echo -e "${Error} 检测最新版本失败 !" && sleep 2s && start_menu
 	if [[ ${sh_new_ver} != ${sh_ver} ]]; then
 		echo -e "发现新版本[ ${sh_new_ver} ]，是否更新？[Y/n]"
 		read -p "(默认: y):" yn
 		[[ -z "${yn}" ]] && yn="y"
 		if [[ ${yn} == [Yy] ]]; then
-			wget -N --no-check-certificate ${github}/ssrpanel-script.sh && chmod +x ss-node-script.sh
+			wget -N --no-check-certificate ${github} && chmod +x ss-node-script.sh
 			echo -e "脚本已更新为最新版本[ ${sh_new_ver} ] ! 稍等片刻，马上运行 !"
 			bash ss-node-script.sh
 		else
