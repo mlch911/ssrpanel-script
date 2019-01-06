@@ -4,12 +4,12 @@ export PATH
 #=================================================
 #	System Required: CentOS 7+
 #	Description: ssrpanel后端一键安装脚本
-#	Version: 0.0.5
+#	Version: 0.0.6
 #	Author: 壕琛
 #	Blog: http://mluoc.top/
 #=================================================
 
-sh_ver="0.0.5"
+sh_ver="0.0.6"
 github="https://raw.githubusercontent.com/mlch911/ssrpanel-script/master/ssrpanel-script.sh"
 
 Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"
@@ -189,7 +189,7 @@ ServerSetup_Shell(){
 
 	#设置邮箱
 	read -p " 请输入绑定的邮箱 :" email
-	sed -i "4c tls ${email}"
+	sed -i "4c tls ${email}" Caddyfile
 
 	echo -e "${Info}服务器配置完成！"
 	sleep 2s
