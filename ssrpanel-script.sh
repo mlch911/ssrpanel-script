@@ -4,12 +4,12 @@ export PATH
 #=================================================
 #	System Required: CentOS 7+
 #	Description: ssrpanel后端一键安装脚本
-#	Version: 0.0.3
+#	Version: 0.0.4
 #	Author: 壕琛
 #	Blog: http://mluoc.top/
 #=================================================
 
-sh_ver="0.0.3"
+sh_ver="0.0.4"
 github="https://git.mluoc.tk/mlch911/ssrpanel-script/raw/branch/master"
 
 Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"
@@ -95,7 +95,7 @@ Update_Shell(){
 		read -p "(默认: y):" yn
 		[[ -z "${yn}" ]] && yn="y"
 		if [[ ${yn} == [Yy] ]]; then
-			wget -N --no-check-certificate ${github}/ss-node-script.sh && chmod +x ss-node-script.sh
+			wget -N --no-check-certificate ${github}/ssrpanel-script.sh && chmod +x ss-node-script.sh
 			echo -e "脚本已更新为最新版本[ ${sh_new_ver} ] ! 稍等片刻，马上运行 !"
 			bash ss-node-script.sh
 		else
