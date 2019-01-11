@@ -4,12 +4,12 @@ export PATH
 #=================================================
 #	System Required: CentOS 7+
 #	Description: ssrpanel后端一键安装脚本
-#	Version: 0.0.9
+#	Version: 0.1.0
 #	Author: 壕琛
 #	Blog: http://mluoc.top/
 #=================================================
 
-sh_ver="0.0.9"
+sh_ver="0.1.0"
 github="https://raw.githubusercontent.com/mlch911/ssrpanel-script/master/ssrpanel-script.sh"
 
 Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"
@@ -124,7 +124,7 @@ Install_Shell(){
 		yum install -y yum-utils device-mapper-persistent-data lvm2
 		yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 		yum makecache fast
-		yum install docker-ce
+		yum -y install docker-ce
 		systemctl enable docker
 		systemctl start docker
 		cd /root
