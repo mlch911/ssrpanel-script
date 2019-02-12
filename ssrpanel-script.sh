@@ -4,12 +4,12 @@ export PATH
 #=================================================
 #	System Required: CentOS 7+
 #	Description: ssrpanel后端一键安装脚本
-#	Version: 0.1.3
+#	Version: 0.1.4
 #	Author: 壕琛
 #	Blog: http://mluoc.top/
 #=================================================
 
-sh_ver="0.1.3"
+sh_ver="0.1.4"
 github="https://raw.githubusercontent.com/mlch911/ssrpanel-script/master/ssrpanel-script.sh"
 
 Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"
@@ -190,14 +190,22 @@ ServerSetup_Shell(){
 	sed -i "27c datasource.password=${mysql_pass}" config.properties
 
 	cd /root/caddy-0.0.3/caddy
-
 	#设置域名
 	read -p " 请输入该节点的域名 :" domin
 	sed -i "1c ${domin}" Caddyfile
-
 	#设置邮箱
 	read -p " 请输入绑定的邮箱 :" email
 	sed -i "4c tls ${email}" Caddyfile
+
+	cd /root/caddy-0.0.3/ssrmu
+	sed -i "2c \    \"host\": \"v2.mluoc.tk\"," usermysql.json
+	sed -i "3c \    \"port\": ${mysql_port}," usermysql.json
+	sed -i "4c \    \"user\": \"${mysql_user}\"," usermysql.json
+	sed -i "5c \    \"password\": \"${mysql_pass}\"," usermysql.json
+	sed -i "6c \    \"db\": \"${mysql_db}\"," usermysql.json
+	sed -i "7c \    \"node_id\": ${node_id}," usermysql.json
+	sed -i "8c \    \"transfer_mul\": ${traffic_rate}," usermysql.json
+
 
 	echo -e "${Info}服务器配置完成！"
 	sleep 2s
