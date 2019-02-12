@@ -4,12 +4,12 @@ export PATH
 #=================================================
 #	System Required: CentOS 7+
 #	Description: ssrpanel后端一键安装脚本
-#	Version: 0.1.4
+#	Version: 0.1.5
 #	Author: 壕琛
 #	Blog: http://mluoc.top/
 #=================================================
 
-sh_ver="0.1.4"
+sh_ver="0.1.5"
 github="https://raw.githubusercontent.com/mlch911/ssrpanel-script/master/ssrpanel-script.sh"
 
 Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"
@@ -95,9 +95,9 @@ Update_Shell(){
 		read -p "(默认: y):" yn
 		[[ -z "${yn}" ]] && yn="y"
 		if [[ ${yn} == [Yy] ]]; then
-			wget -N --no-check-certificate ${github} && chmod +x ss-node-script.sh
+			wget -N --no-check-certificate ${github} && chmod +x ssrpanel-script.sh
 			echo -e "脚本已更新为最新版本[ ${sh_new_ver} ] ! 稍等片刻，马上运行 !"
-			bash ss-node-script.sh
+			bash ssrpanel-script.sh
 		else
 			echo && echo "	已取消..." && echo
 			start_menu
@@ -166,7 +166,7 @@ ServerSetup_Shell(){
 		mysql_port=${mysql_port_input}
 	fi
 	#设置mysql服务器名
-	read -p ' 请输入sspanel服务器的数据库名称(不输入则为ssrpanel) :' mysql_db_input
+	read -p ' 请输入ssrpanel服务器的数据库名称(不输入则为ssrpanel) :' mysql_db_input
 	mysql_db="ssrpanel"
 	if  [ ${mysql_db_input} ] ;then
 		mysql_db=${mysql_db_input}
