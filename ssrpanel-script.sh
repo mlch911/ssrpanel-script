@@ -4,12 +4,12 @@ export PATH
 #=================================================
 #	System Required: CentOS 7+
 #	Description: ssrpanel后端一键安装脚本
-#	Version: 0.1.5
+#	Version: 0.2.0
 #	Author: 壕琛
 #	Blog: http://mluoc.top/
 #=================================================
 
-sh_ver="0.1.5"
+sh_ver="0.2.0"
 github="https://raw.githubusercontent.com/mlch911/ssrpanel-script/master/ssrpanel-script.sh"
 
 Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"
@@ -128,8 +128,8 @@ Install_Shell(){
 		systemctl enable docker
 		systemctl start docker
 		cd /root
-		wget https://github.com/kszym2002/ssrpanel-be/releases/download/caddy-0.0.3/caddy-0.0.3.zip
-		unzip caddy-0.0.3.zip
+		wget https://github.com/kszym2002/ssrpanel-be/releases/download/caddy-go/caddy-go.zip
+		unzip caddy-go.zip
 	fi
 
 	echo -e "${Info}依赖安装结束！"
@@ -139,19 +139,19 @@ Install_Shell(){
 
 #服务器配置
 ServerSetup_Shell(){
-	cd /root/caddy-0.0.3/v2ray
+	cd /root/caddy-go/v2ray
 
 	#设置node.id
 	read -p " 请输入该节点的node.id :" node_id
-	sed -i "17c node.id=${node_id}" config.properties
+	sed -i "69c "nodeId": ${node_id}," config.json
 
-	#设置流量比例
-	read -p " 请输入该节点的流量比例 :(不输入则为1.0)" traffic_rate_input
-	traffic_rate="1.0"
-	if  [ ${traffic_rate_input} ] ;then
-		traffic_rate=${traffic_rate_input}
-	fi
-	sed -i "21c node.traffic-rate=${traffic_rate}" config.properties
+	# #设置流量比例
+	# read -p " 请输入该节点的流量比例 :(不输入则为1.0)" traffic_rate_input
+	# traffic_rate="1.0"
+	# if  [ ${traffic_rate_input} ] ;then
+	# 	traffic_rate=${traffic_rate_input}
+	# fi
+	# sed -i "21c node.traffic-rate=${traffic_rate}" config.properties
 
 	#设置服务器IP
 	read -p ' 请输入ssrpanel服务器的IP(不输入则为127.0.0.1) :' mysql_host_input
@@ -159,19 +159,23 @@ ServerSetup_Shell(){
 	if  [ ${mysql_host_input} ] ;then
 		mysql_host=${mysql_host_input}
 	fi
+	sed -i "82c "host": "${mysql_host}"," config.json
+
 	#设置服务器端口
 	read -p ' 请输入ssrpanel服务器的端口(不输入则为3306) :' mysql_port_input
 	mysql_port=3306
 	if  [ ${mysql_port_input} ] ;then
 		mysql_port=${mysql_port_input}
 	fi
+	sed -i "83c "port": ${mysql_port}," config.json
+
 	#设置mysql服务器名
 	read -p ' 请输入ssrpanel服务器的数据库名称(不输入则为ssrpanel) :' mysql_db_input
 	mysql_db="ssrpanel"
 	if  [ ${mysql_db_input} ] ;then
 		mysql_db=${mysql_db_input}
 	fi
-	sed -i "25c datasource.url=jdbc:mysql://${mysql_host}:${mysql_port}/${mysql_db}?serverTimezone=GMT%2B8" config.properties
+	sed -i "86c "dbname": "${mysql_db}"" config.json
 
 	#设置mysql服务器用户名
 	read -p ' 请输入ssrpanel服务器的数据库用户名(不输入则为ssrpanel) :' mysql_user_input
@@ -179,7 +183,7 @@ ServerSetup_Shell(){
 	if  [ ${mysql_user_input} ] ;then
 		mysql_user=${mysql_user_input}
 	fi
-	sed -i "26c datasource.username=${mysql_db}" config.properties
+	sed -i "84c "user": "${mysql_user}"," config.json
 
 	#设置mysql服务器密码
 	read -p ' 请输入ssrpanel服务器的数据库密码(不输入则为ssrpanel) :' mysql_pass_input
@@ -187,25 +191,17 @@ ServerSetup_Shell(){
 	if  [ ${mysql_pass_input} ] ;then
 		mysql_pass=${mysql_pass_input}
 	fi
-	sed -i "27c datasource.password=${mysql_pass}" config.properties
+	sed -i "85c "password": "${mysql_pass}"," config.json
 
-	cd /root/caddy-0.0.3/caddy
+	cd /root/caddy-go/caddy
+
 	#设置域名
 	read -p " 请输入该节点的域名 :" domin
 	sed -i "1c ${domin}" Caddyfile
+
 	#设置邮箱
 	read -p " 请输入绑定的邮箱 :" email
 	sed -i "4c tls ${email}" Caddyfile
-
-	cd /root/caddy-0.0.3/ssrmu
-	sed -i "2c \    \"host\": \"v2.mluoc.tk\"," usermysql.json
-	sed -i "3c \    \"port\": ${mysql_port}," usermysql.json
-	sed -i "4c \    \"user\": \"${mysql_user}\"," usermysql.json
-	sed -i "5c \    \"password\": \"${mysql_pass}\"," usermysql.json
-	sed -i "6c \    \"db\": \"${mysql_db}\"," usermysql.json
-	sed -i "7c \    \"node_id\": ${node_id}," usermysql.json
-	sed -i "8c \    \"transfer_mul\": ${traffic_rate}," usermysql.json
-
 
 	echo -e "${Info}服务器配置完成！"
 	sleep 2s
@@ -214,7 +210,7 @@ ServerSetup_Shell(){
 
 #运行服务
 Run_Shell(){
-	cd /root/caddy-0.0.3
+	cd /root/caddy-go
 	read -p "是否运行服务 :(y/n)" run_input_a
 	if [ ${run_input_a} == "y" ] ;then
 		docker-compose up -d
@@ -289,7 +285,7 @@ Firewalld_Shell(){
 #查看log
 Logs(){
 	clear
-	cd /root/caddy-0.0.3
+	cd /root/caddy-go
 	docker-compose logs
 	read -p "是否退出脚本 :(y/n)" logs_input
 	if [ ${logs_input} == "y" ] ;then
@@ -302,7 +298,7 @@ Logs(){
 #卸载全部
 Uninstall(){
 	clear
-	cd /root/caddy-0.0.3
+	cd /root/caddy-go
 	read -p "是否确认卸载 :(y/n)" uninstall_input_a
 	if [ ${uninstall_input_a} == "y" ] ;then
 		docker-compose down
