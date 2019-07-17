@@ -4,12 +4,12 @@ export PATH
 #=================================================
 #	System Required: CentOS 7+
 #	Description: ssrpanel后端一键安装脚本
-#	Version: 0.2.0
+#	Version: 0.2.1
 #	Author: 壕琛
 #	Blog: http://mluoc.top/
 #=================================================
 
-sh_ver="0.2.0"
+sh_ver="0.2.1"
 github="https://raw.githubusercontent.com/mlch911/ssrpanel-script/master/ssrpanel-script.sh"
 
 Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"
@@ -143,7 +143,7 @@ ServerSetup_Shell(){
 
 	#设置node.id
 	read -p " 请输入该节点的node.id :" node_id
-	sed -i "69c "nodeId": ${node_id}," config.json
+	sed -i "69c \    \"nodeId\": ${node_id}," config.json
 
 	# #设置流量比例
 	# read -p " 请输入该节点的流量比例 :(不输入则为1.0)" traffic_rate_input
@@ -159,7 +159,7 @@ ServerSetup_Shell(){
 	if  [ ${mysql_host_input} ] ;then
 		mysql_host=${mysql_host_input}
 	fi
-	sed -i "82c "host": "${mysql_host}"," config.json
+	sed -i "82c \      \"host\": \"${mysql_host}\"," config.json
 
 	#设置服务器端口
 	read -p ' 请输入ssrpanel服务器的端口(不输入则为3306) :' mysql_port_input
@@ -167,7 +167,7 @@ ServerSetup_Shell(){
 	if  [ ${mysql_port_input} ] ;then
 		mysql_port=${mysql_port_input}
 	fi
-	sed -i "83c "port": ${mysql_port}," config.json
+	sed -i "83c \      \"port\": ${mysql_port}," config.json
 
 	#设置mysql服务器名
 	read -p ' 请输入ssrpanel服务器的数据库名称(不输入则为ssrpanel) :' mysql_db_input
@@ -175,7 +175,7 @@ ServerSetup_Shell(){
 	if  [ ${mysql_db_input} ] ;then
 		mysql_db=${mysql_db_input}
 	fi
-	sed -i "86c "dbname": "${mysql_db}"" config.json
+	sed -i "86c \      \"dbname\": \"${mysql_db}\"" config.json
 
 	#设置mysql服务器用户名
 	read -p ' 请输入ssrpanel服务器的数据库用户名(不输入则为ssrpanel) :' mysql_user_input
@@ -183,7 +183,7 @@ ServerSetup_Shell(){
 	if  [ ${mysql_user_input} ] ;then
 		mysql_user=${mysql_user_input}
 	fi
-	sed -i "84c "user": "${mysql_user}"," config.json
+	sed -i "84c \      \"user\": \"${mysql_user}\"," config.json
 
 	#设置mysql服务器密码
 	read -p ' 请输入ssrpanel服务器的数据库密码(不输入则为ssrpanel) :' mysql_pass_input
@@ -191,7 +191,7 @@ ServerSetup_Shell(){
 	if  [ ${mysql_pass_input} ] ;then
 		mysql_pass=${mysql_pass_input}
 	fi
-	sed -i "85c "password": "${mysql_pass}"," config.json
+	sed -i "85c \      \"password\": \"${mysql_pass}\"," config.json
 
 	cd /root/caddy-go/caddy
 
@@ -201,7 +201,7 @@ ServerSetup_Shell(){
 
 	#设置邮箱
 	read -p " 请输入绑定的邮箱 :" email
-	sed -i "4c tls ${email}" Caddyfile
+	sed -i "4c \  tls ${email}" Caddyfile
 
 	echo -e "${Info}服务器配置完成！"
 	sleep 2s
