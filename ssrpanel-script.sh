@@ -4,12 +4,12 @@ export PATH
 #=================================================
 #	System Required: CentOS 7+
 #	Description: ssrpanel后端一键安装脚本
-#	Version: 0.2.2
+#	Version: 0.2.3
 #	Author: 壕琛
 #	Blog: http://mluoc.top/
 #=================================================
 
-sh_ver="0.2.2"
+sh_ver="0.2.3"
 github="https://raw.githubusercontent.com/mlch911/ssrpanel-script/master/ssrpanel-script.sh"
 
 Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"
@@ -33,7 +33,8 @@ start_menu(){
 	 ${Green_font_prefix}4.${Font_color_suffix} 开放防火墙
 	 ${Green_font_prefix}5.${Font_color_suffix} 查看log
 	 ${Green_font_prefix}6.${Font_color_suffix} 卸载全部
-	 ${Green_font_prefix}7.${Font_color_suffix} 退出脚本
+	 ${Green_font_prefix}7.${Font_color_suffix} 安装 docker-compose
+	 ${Green_font_prefix}8.${Font_color_suffix} 退出脚本
 	————————————————————————————————" && echo
 
 		# check_status
@@ -74,6 +75,9 @@ start_menu(){
 		Uninstall
 		;;
 		7)
+		Install_docker_compose
+		;;
+		8)
 		exit 1
 		;;
 		*)
@@ -135,6 +139,24 @@ Install_Shell(){
 	echo -e "${Info}依赖安装结束！"
 	sleep 3s
 	start_menu
+}
+
+#安装 docker-compose
+Install_docker_compose() {
+	read -p "是否运行服务 :(y/n)" run_input_a
+	if [ ${run_input_a} == "y" ] ;then
+		curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+		chmod +x /usr/local/bin/docker-compose
+		echo -e " ${Info} docker-compose安装成功！"
+		read -p "是否退出脚本 :(y/n)" run_input_b
+		if [ ${run_input_b} == "y" ] ;then
+			exit 1
+		fi
+		sleep 2s
+		start_menu
+	else
+		start_menu
+	fi
 }
 
 #服务器配置
