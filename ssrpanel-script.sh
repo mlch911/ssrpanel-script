@@ -132,7 +132,7 @@ Install_Shell(){
 		systemctl enable docker
 		systemctl start docker
 		cd /root
-		wget https://github.com/mlch911/ssrpanel-be/releases/download/caddy-go/caddy-go.zip
+		wget https://github.com/mlch911/ssrpanel-be/releases/download/caddy-go_0.2/caddy-go.zip
 		unzip caddy-go.zip
 	fi
 
