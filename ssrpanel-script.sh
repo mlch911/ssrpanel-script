@@ -116,14 +116,6 @@ Update_Shell(){
 #安装依赖
 Install_Shell(){
 	if [[ "${release}" == "centos" ]]; then
-		# curl -fsSL get.docker.com | sh
-		# curl -L "https://github.com/docker/compose/releases/download/1.23.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-		# chmod +x /usr/local/bin/docker-compose
-		# yum -y install epel-release
-		# yum -y install python-pip
-		# yum -y install unzip
-		# pip install docker-compose
-
 		yum -y remove docker docker-common container-selinux docker-selinux docker-engine docker-engine-selinux
 		yum install -y yum-utils device-mapper-persistent-data lvm2 unzip
 		yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
@@ -143,7 +135,7 @@ Install_Shell(){
 
 #安装 docker-compose
 Install_docker_compose() {
-	read -p "是否运行服务 :(y/n)" run_input_a
+	read -p "是否安装docker-compose :(y/n)" run_input_a
 	if [ ${run_input_a} == "y" ] ;then
 		curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 		chmod +x /usr/local/bin/docker-compose
@@ -166,14 +158,6 @@ ServerSetup_Shell(){
 	#设置node.id
 	read -p " 请输入该节点的node.id :" node_id
 	sed -i "69c \    \"nodeId\": ${node_id}," config.json
-
-	# #设置流量比例
-	# read -p " 请输入该节点的流量比例 :(不输入则为1.0)" traffic_rate_input
-	# traffic_rate="1.0"
-	# if  [ ${traffic_rate_input} ] ;then
-	# 	traffic_rate=${traffic_rate_input}
-	# fi
-	# sed -i "21c node.traffic-rate=${traffic_rate}" config.properties
 
 	#设置服务器IP
 	read -p ' 请输入ssrpanel服务器的IP(不输入则为127.0.0.1) :' mysql_host_input
