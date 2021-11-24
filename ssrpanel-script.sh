@@ -4,12 +4,12 @@ export PATH
 #=================================================
 #	System Required: CentOS 7+
 #	Description: ssrpanel后端一键安装脚本
-#	Version: 0.2.3
+#	Version: 0.2.4
 #	Author: 壕琛
 #	Blog: http://mluoc.top/
 #=================================================
 
-sh_ver="0.2.3"
+sh_ver="0.2.4"
 github="https://raw.githubusercontent.com/mlch911/ssrpanel-script/master/ssrpanel-script.sh"
 
 Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"
@@ -115,19 +115,27 @@ Update_Shell(){
 
 #安装依赖
 Install_Shell(){
-	if [[ "${release}" == "centos" ]]; then
-		yum -y remove docker docker-common container-selinux docker-selinux docker-engine docker-engine-selinux
-		yum install -y yum-utils device-mapper-persistent-data lvm2 unzip
-		yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-		yum makecache fast
-		yum -y install docker-ce docker-compose
-		systemctl enable docker
-		systemctl start docker
+	case $release in
+	"centos")
+		sudo yum -y remove docker docker-common container-selinux docker-selinux docker-engine docker-engine-selinux
+		sudo yum install -y yum-utils device-mapper-persistent-data lvm2 unzip
+		sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+		sudo yum makecache fast
+		sudo yum -y install docker-ce docker-compose
+		sudo systemctl enable docker
+		sudo systemctl start docker
 		cd /root
-		wget https://github.com/mlch911/ssrpanel-be/releases/download/caddy-go_0.2/caddy-go.zip
-		unzip caddy-go.zip
-	fi
-
+		;;
+	"debian" | "ubuntu")
+		sudo apt -y install docker-ce docker-compose
+		sudo systemctl enable docker
+		sudo systemctl start docker
+		;;
+	*) ;;
+	esac
+	wget https://github.com/mlch911/ssrpanel-be/releases/download/caddy-go_0.2/caddy-go.zip
+	unzip caddy-go.zip
+	
 	echo -e "${Info}依赖安装结束！"
 	sleep 3s
 	start_menu
@@ -359,5 +367,11 @@ check_version(){
 
 check_sys
 check_version
-[[ ${release} != "centos" ]] && echo -e "${Error} 本脚本不支持当前系统 ${release} !" && exit 1
-start_menu
+case $release in
+"centos" | "debian" | "ubuntu")
+	start_menu
+	;;
+*)
+	echo -e "${Error} 本脚本不支持当前系统 ${release} !" && exit 1
+	;;
+esac
