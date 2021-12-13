@@ -140,6 +140,11 @@ Install_Shell(){
 	esac
 	wget https://github.com/mlch911/ssrpanel-be/releases/download/caddy2-go_0.1/caddy-go.zip
 	unzip caddy-go.zip
+
+	read -p "是否使用脚本自带的 Caddy ([y]/n]): " use_caddy
+	if [ ${use_caddy} == "n" ]; then
+		sed -i '19,$d' caddy-go/docker-compose.yml
+	fi
 	
 	echo -e "${Info}依赖安装结束！"
 	sleep 3s
