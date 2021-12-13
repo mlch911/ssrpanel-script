@@ -4,12 +4,12 @@ export PATH
 #=================================================
 #	System Required: CentOS 7+
 #	Description: ssrpanel后端一键安装脚本
-#	Version: 0.2.4
+#	Version: 0.2.5
 #	Author: 壕琛
 #	Blog: http://mluoc.top/
 #=================================================
 
-sh_ver="0.2.4"
+sh_ver="0.2.5"
 github="https://raw.githubusercontent.com/mlch911/ssrpanel-script/master/ssrpanel-script.sh"
 
 Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"
@@ -138,7 +138,7 @@ Install_Shell(){
 		;;
 	*) ;;
 	esac
-	wget https://github.com/mlch911/ssrpanel-be/releases/download/caddy-go_0.2/caddy-go.zip
+	wget https://github.com/mlch911/ssrpanel-be/releases/download/caddy2-go_0.1/caddy-go.zip
 	unzip caddy-go.zip
 	
 	echo -e "${Info}依赖安装结束！"
@@ -220,7 +220,7 @@ ServerSetup_Shell(){
 
 	#设置邮箱
 	read -p " 请输入绑定的邮箱 :" email
-	sed -i "4c \  tls ${email}" Caddyfile
+	sed -i "5c \  tls ${email}" Caddyfile
 
 	echo -e "${Info}服务器配置完成！"
 	sleep 2s
