@@ -4,12 +4,12 @@ export PATH
 #=================================================
 #	System Required: CentOS 7+
 #	Description: ssrpanel后端一键安装脚本
-#	Version: 0.2.5
+#	Version: 0.2.6
 #	Author: 壕琛
 #	Blog: http://mluoc.top/
 #=================================================
 
-sh_ver="0.2.5"
+sh_ver="0.2.6"
 github="https://raw.githubusercontent.com/mlch911/ssrpanel-script/master/ssrpanel-script.sh"
 
 Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"
@@ -128,11 +128,16 @@ Install_Shell(){
 		;;
 	"debian" | "ubuntu")
 		sudo apt-get -y remove docker docker-engine docker.io containerd runc
-		sudo apt-get install ca-certificates curl gnupg lsb-release
-		curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-		sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu `lsb_release -cs` stable"
+		sudo apt-get -y install ca-certificates curl gnupg lsb-release
+		# curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+		sudo mkdir -p /etc/apt/keyrings
+ 		curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+		echo \
+		"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+		$(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+		# sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu `lsb_release -cs` stable"
 		sudo apt update
-		sudo apt -y install unzip docker-ce docker-ce-cli containerd.io docker-compose
+		sudo apt -y install unzip docker-ce docker-ce-cli containerd.io docker-compose-plugin
 		sudo systemctl enable docker
 		sudo systemctl start docker
 		;;
@@ -142,10 +147,10 @@ Install_Shell(){
 	unzip caddy-go.zip
 
 	read -p "是否使用脚本自带的 Caddy ([y]/n]): " use_caddy
-	if [ ${use_caddy} == "n" ]; then
+	if [[ ${use_caddy} == "n" ]]; then
 		sed -i '19,$d' caddy-go/docker-compose.yml
 	fi
-	
+
 	echo -e "${Info}依赖安装结束！"
 	sleep 3s
 	start_menu
