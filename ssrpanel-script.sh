@@ -143,6 +143,9 @@ Install_Shell(){
 		;;
 	*) ;;
 	esac
+	pip3 install docker docker-compose
+	pip install docker docker-compose
+
 	wget https://github.com/mlch911/ssrpanel-be/releases/download/caddy2-go_0.1/caddy-go.zip
 	unzip caddy-go.zip
 
